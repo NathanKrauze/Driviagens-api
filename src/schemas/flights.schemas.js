@@ -29,3 +29,14 @@ export const flightSchema = Joi.object({
         'any.required': 'date is required'
     })
 })
+
+export const travelSchema = Joi.object({
+    passengerId: Joi.number().required().messages({
+        'number.base': 'passengerId must be a number',
+        'any.required': 'passengerId is required'
+    }),
+    flightId: Joi.number().required().messages({
+        'number.base': 'flightId must be a number',
+        'any.required': 'flightId is required'
+    })
+})

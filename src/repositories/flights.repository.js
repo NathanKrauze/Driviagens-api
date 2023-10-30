@@ -24,5 +24,15 @@ function createFlight(origin, destination, date){
     `,[origin, destination, date])
 }
 
-const flightsDB = {createCity, getCity, checkCities, createFlight};
+function getFlightById(id){
+    return db.query(`SELECT id FROM flights WHERE id = $1`,[id])
+}
+
+function createTravel(passengerId, flightId){
+    return db.query(`
+    INSERT INTO travels ("passengerId", "flightId") VALUES ($1, $2) RETURNING *;
+    `,[passengerId, flightId])
+}
+
+const flightsDB = {createCity, getCity, checkCities, createFlight, getFlightById, createTravel};
 export default flightsDB;

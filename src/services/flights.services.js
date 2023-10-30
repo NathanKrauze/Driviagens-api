@@ -1,5 +1,6 @@
 import { conflictError, notFoundError } from "../errors/errors.js";
 import flightsDB from "../repositories/flights.repository.js";
+import passengersDB from "../repositories/passengers.repository.js";
 
 async function createCity(name){
     const cityExists = await flightsDB.getCity(name);
@@ -23,5 +24,16 @@ async function createFlight(origin, destination, date){
     return result.rows[0];
 }
 
-const flightServices = {createCity, createFlight};
+async function createTravel(passengerId, flightId){
+    const checkPassenger = await passengersDB.getPassengerById(passengerId);
+    if(checkPassenger.rowCount === 0) throw notFoundError('passenger not found');
+
+    const checkFlight = await flightsDB.getFlightById(flightId);
+    if(checkFlight.rowCount === 0) throw notFoundError('flight not found');
+
+    const result = await flightsDB.createTravel(passengerId, flightId);
+    return result.rows[0]
+}
+
+const flightServices = {createCity, createFlight, createTravel};
 export default flightServices;

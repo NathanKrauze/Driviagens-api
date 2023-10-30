@@ -14,7 +14,9 @@ export async function createFlight(req, res){
 };
 
 export async function createTravel(req, res){
-    res.send('ok')
+    const {passengerId, flightId} = req.body;
+    const result = await flightServices.createTravel(passengerId, flightId);
+    res.status(httpStatus.CREATED).send(result);
 };
 
 export async function getFlights(req, res){
