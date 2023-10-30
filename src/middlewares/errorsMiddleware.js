@@ -11,5 +11,9 @@ export async function handleErrors(error, req, res, next) {
         return res.status(httpStatus.CONFLICT).send({message: error.message})
     }
 
+    if(error.type === 'not-found'){
+        return res.status(httpStatus.NOT_FOUND).send({message: error.message})
+    }
+
     return res.sendStatus(500);
 }

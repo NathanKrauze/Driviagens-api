@@ -11,3 +11,21 @@ export const citySchema = Joi.object({
         'any.required': 'city name is required'
     })
 })
+
+export const flightSchema = Joi.object({
+    origin: Joi.number().required().messages({
+        'number.base': 'origin must be a number',
+        'any.required': 'origin is required'
+    }),
+    destination: Joi.number().required().invalid(Joi.ref('origin')).messages({
+        'number.base': 'destination must be a number',
+        'any.invalid': 'destination must be different from origin',
+        'any.required': 'destination is required'
+    }),
+    date: Joi.date().format('DD-MM-YYYY').greater('now').required().messages({
+        'date.base': 'date must be in date format',
+        'date.format': 'date must be at this format: DD-MM-YYYY',
+        'date.greater': 'date must be greater than today',
+        'any.required': 'date is required'
+    })
+})

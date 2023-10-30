@@ -13,4 +13,4 @@ export const passengerSchema = Joi.object({
         'string.max': 'last name must have a maximum of 100 characters',
         'any.required': 'last name is required'
     })
-}).required()
+})
