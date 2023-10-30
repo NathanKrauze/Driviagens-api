@@ -8,7 +8,7 @@ function createCity(name){
 
 function getCity(name){
     return db.query(`
-    SELECT * FROM cities WHERE name = name;
+    SELECT * FROM cities WHERE name = $1;
     `, [name])
 }
 
@@ -34,5 +34,15 @@ function createTravel(passengerId, flightId){
     `,[passengerId, flightId])
 }
 
-const flightsDB = {createCity, getCity, checkCities, createFlight, getFlightById, createTravel};
+function getFlights(origin, destination){
+    return db.query(`
+    SELECT flights.id, origin.name AS origin , destination.name AS destination , TO_CHAR(flights.date, 'DD-MM-YYYY') AS date
+        FROM flights
+        INNER JOIN cities AS origin ON flights.origin = origin.id
+        INNER JOIN cities AS destination ON flights.destination = destination.id
+        WHERE origin.name ILIKE $1 AND destination.name ILIKE $2;
+    `,[origin, destination])
+}
+
+const flightsDB = {createCity, getCity, checkCities, createFlight, getFlightById, createTravel, getFlights};
 export default flightsDB;

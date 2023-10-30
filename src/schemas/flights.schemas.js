@@ -17,9 +17,8 @@ export const flightSchema = Joi.object({
         'number.base': 'origin must be a number',
         'any.required': 'origin is required'
     }),
-    destination: Joi.number().required().invalid(Joi.ref('origin')).messages({
+    destination: Joi.number().required().messages({
         'number.base': 'destination must be a number',
-        'any.invalid': 'destination must be different from origin',
         'any.required': 'destination is required'
     }),
     date: Joi.date().format('DD-MM-YYYY').greater('now').required().messages({

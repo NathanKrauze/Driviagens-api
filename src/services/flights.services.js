@@ -11,6 +11,7 @@ async function createCity(name){
 }
 
 async function createFlight(origin, destination, date){
+    if (origin === destination) throw conflictError('destination must be different from origin')
     const checkCities = await flightsDB.checkCities(origin, destination);
     if (checkCities.rowCount < 2 ) {
         if(checkCities.rowCount === 0){
@@ -35,5 +36,10 @@ async function createTravel(passengerId, flightId){
     return result.rows[0]
 }
 
-const flightServices = {createCity, createFlight, createTravel};
+async function getFlights(origin, destination){
+    const result = await flightsDB.getFlights(origin, destination);
+    return result.rows
+}
+
+const flightServices = {createCity, createFlight, createTravel, getFlights};
 export default flightServices;

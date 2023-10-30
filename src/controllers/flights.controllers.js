@@ -20,5 +20,8 @@ export async function createTravel(req, res){
 };
 
 export async function getFlights(req, res){
-    res.send('ok')
+    const origin = req.query.origin? '%' + req.query.origin + '%' : '%%';
+    const destination = req.query.destination? '%' + req.query.destination + '%' : '%%';
+    const result = await flightServices.getFlights(origin, destination);
+    res.status(httpStatus.OK).send(result)
 };
