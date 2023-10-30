@@ -5,5 +5,10 @@ async function createPassenger(firstName, lastName){
     return passenger.rows[0];
 }
 
-const passengersServices = {createPassenger};
+async function getPassengers(name){
+    const result = await passengersDB.getPassengers(name);
+    return result.rows;
+}
+
+const passengersServices = {createPassenger, getPassengers};
 export default passengersServices

@@ -8,5 +8,7 @@ export async function createPassenger(req, res){
 }
 
 export async function getPassengers (req, res){
-    res.send('ok') 
+    const name = req.query.name? '%' + req.query.name + '%' : '%%';
+    const result = await passengersServices.getPassengers(name);
+    res.status(httpStatus.OK).send(result)
 }
