@@ -1,6 +1,10 @@
+import httpStatus from "http-status";
+import flightServices from "../services/flights.services.js";
 
 export async function createCity(req, res){
-    res.send('ok')
+    const{name} = req.body;
+    const result = await flightServices.createCity(name);
+    res.status(httpStatus.OK).send(result);
 }
 
 export async function createFlight(req, res){
