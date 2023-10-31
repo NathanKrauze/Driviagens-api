@@ -3,46 +3,50 @@ import { conflictError, notFoundError } from "../errors/errors.js";
 import flightsDB from "../repositories/flights.repository.js";
 import passengersDB from "../repositories/passengers.repository.js";
 
-async function createCity(name){
+async function createCity(name) {
     const cityExists = await flightsDB.getCity(name);
-    if(cityExists.rowCount > 0) throw conflictError('this city already exists');
+    if (cityExists.rowCount > 0) throw conflictError('this city already exists');
 
     const result = await flightsDB.createCity(name);
     return result.rows[0]
 }
 
-async function createFlight(origin, destination, date){
+async function createFlight(origin, destination, date) {
     if (origin === destination) throw conflictError('destination must be different from origin')
     const checkCities = await flightsDB.checkCities(origin, destination);
-    if (checkCities.rowCount < 2 ) {
-        if(checkCities.rowCount === 0){
+    if (checkCities.rowCount < 2) {
+        if (checkCities.rowCount === 0) {
             throw notFoundError('Origin and destination not founded')
         }
         const cityNotFound = checkCities.rows[0].id === origin ? 'destination' : 'origin';
         throw notFoundError(`${cityNotFound} not found`)
     }
 
-    const formatDate = dayjs(date).format('YYYY-MM-DD');
+    const dia = date.split("-")[0];
+    const mes = date.split("-")[1];
+    const ano = date.split("-")[2];
+
+    const formatDate =  ano + '-' + ("0" + mes).slice(-2) + '-' + ("0" + dia).slice(-2);
 
     const result = await flightsDB.createFlight(origin, destination, formatDate);
     return result.rows[0];
 }
 
-async function createTravel(passengerId, flightId){
+async function createTravel(passengerId, flightId) {
     const checkPassenger = await passengersDB.getPassengerById(passengerId);
-    if(checkPassenger.rowCount === 0) throw notFoundError('passenger not found');
+    if (checkPassenger.rowCount === 0) throw notFoundError('passenger not found');
 
     const checkFlight = await flightsDB.getFlightById(flightId);
-    if(checkFlight.rowCount === 0) throw notFoundError('flight not found');
+    if (checkFlight.rowCount === 0) throw notFoundError('flight not found');
 
     const result = await flightsDB.createTravel(passengerId, flightId);
     return result.rows[0]
 }
 
-async function getFlights(origin, destination){
+async function getFlights(origin, destination) {
     const result = await flightsDB.getFlights(origin, destination);
     return result.rows
 }
 
-const flightServices = {createCity, createFlight, createTravel, getFlights};
+const flightServices = { createCity, createFlight, createTravel, getFlights };
 export default flightServices;
