@@ -1,3 +1,4 @@
+import dayjs from "dayjs";
 import { conflictError, notFoundError } from "../errors/errors.js";
 import flightsDB from "../repositories/flights.repository.js";
 import passengersDB from "../repositories/passengers.repository.js";
@@ -21,7 +22,9 @@ async function createFlight(origin, destination, date){
         throw notFoundError(`${cityNotFound} not found`)
     }
 
-    const result = await flightsDB.createFlight(origin, destination, date);
+    const formatDate = dayjs(date).format('YYYY-MM-DD');
+
+    const result = await flightsDB.createFlight(origin, destination, formatDate);
     return result.rows[0];
 }
 
